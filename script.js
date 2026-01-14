@@ -1,6 +1,3 @@
-// ------------------------------
-// Elements
-// ------------------------------
 const surpriseBtn = document.getElementById('surprise-btn');
 const animatedText = document.getElementById('animated-text');
 const balloonsContainer = document.getElementById('balloons-container');
@@ -8,103 +5,77 @@ const gallery = document.getElementById('gallery');
 const videoSection = document.getElementById('video-section');
 const bgMusic = document.getElementById('bg-music');
 const confettiCanvas = document.getElementById('confetti');
+const ctx = confettiCanvas.getContext('2d');
 
-// ------------------------------
-// Click Surprise Button
-// ------------------------------
-surpriseBtn.addEventListener('click', () => {
-    // Show heading
+function resizeCanvas() {
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+surpriseBtn.addEventListener('click', async () => {
     animatedText.style.opacity = 1;
     animatedText.style.transform = 'scale(1)';
 
-    // Play background music
-    bgMusic.play();
+    try {
+        await bgMusic.play();
+    } catch (e) {
+        console.log("Autoplay blocked");
+    }
 
-    // Show gallery & video
     gallery.classList.remove('hidden');
     videoSection.classList.remove('hidden');
-
-    // Create balloons
-    createBalloons(5); // fewer balloons
-
-    // Hide button after click
     surpriseBtn.style.display = 'none';
 
-    // Start confetti animation
+    createBalloons(5);
     startConfetti();
 });
 
-// ------------------------------
-// Create Floating Balloons
-// ------------------------------
 function createBalloons(count) {
-    const colors = ['#ffb6c1', '#ffd1dc', '#ff69b4', '#ff8da1', '#ffc0cb'];
+    const colors = ['#ffb6c1', '#ffd1dc', '#ff69b4'];
 
     for (let i = 0; i < count; i++) {
         const balloon = document.createElement('div');
-        balloon.classList.add('balloon');
-        balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        balloon.style.left = Math.random() * window.innerWidth + 'px';
+        balloon.className = 'balloon';
+        balloon.style.backgroundColor = colors[Math.random() * colors.length | 0];
+        balloon.style.left = Math.random() * 100 + '%';
         balloon.style.bottom = '-100px';
 
-        // Float animation using CSS
-        balloon.style.animation = `float ${20 + Math.random() * 10}s linear infinite`;
-
-        // Pop balloon on click
-        balloon.addEventListener('click', () => {
-            balloon.remove();
-        });
-
+        balloon.onclick = () => balloon.remove();
         balloonsContainer.appendChild(balloon);
     }
 }
 
-// ------------------------------
-// Simple Confetti Effect
-// ------------------------------
+/* Confetti */
+let confetti = Array.from({ length: 120 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 6 + 4,
+    d: Math.random() * 100,
+    color: `hsl(${Math.random() * 360},100%,70%)`
+}));
+
 function startConfetti() {
-    const ctx = confettiCanvas.getContext('2d');
-    confettiCanvas.width = window.innerWidth;
-    confettiCanvas.height = window.innerHeight;
-
-    const colors = ['#ff0a54', '#ff477e', '#ff85a1', '#fbb1b1', '#f9bec7'];
-    const confettiCount = 100;
-    const confetti = [];
-
-    for (let i = 0; i < confettiCount; i++) {
-        confetti.push({
-            x: Math.random() * confettiCanvas.width,
-            y: Math.random() * confettiCanvas.height,
-            r: Math.random() * 6 + 4,
-            d: Math.random() * confettiCount,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            tilt: Math.random() * 10 - 10
-        });
-    }
-
-    function draw() {
+    function animate() {
         ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
         confetti.forEach(c => {
             ctx.beginPath();
-            ctx.lineWidth = c.r;
             ctx.strokeStyle = c.color;
-            ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
-            ctx.lineTo(c.x + c.tilt, c.y + c.r);
+            ctx.lineWidth = c.r;
+            ctx.moveTo(c.x, c.y);
+            ctx.lineTo(c.x + 5, c.y + 10);
             ctx.stroke();
-        });
-        update();
-    }
 
-    function update() {
-        confetti.forEach(c => {
-            c.y += Math.cos(c.d) + 1 + c.r / 2;
-            c.x += Math.sin(c.d);
+            c.y += 2;
             if (c.y > confettiCanvas.height) {
                 c.y = -10;
                 c.x = Math.random() * confettiCanvas.width;
             }
         });
-    }
 
-    setInterval(draw, 20);
+        requestAnimationFrame(animate);
+    }
+    animate();
 }
