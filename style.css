@@ -1,6 +1,3 @@
-/* =========================
-   GLOBAL STYLES
-========================= */
 * {
     margin: 0;
     padding: 0;
@@ -15,33 +12,16 @@ body {
     min-height: 100vh;
 }
 
-/* =========================
-   MAIN CARD
-========================= */
+/* Card */
 .card {
     background: white;
     max-width: 500px;
     margin: 40px auto;
     padding: 30px;
     border-radius: 30px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-}
-
-/* Entrance Animation */
-.entrance {
-    animation: popIn 1.5s ease;
-}
-
-@keyframes popIn {
-    0% {
-        transform: scale(0.5);
-        opacity: 0;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 2;
 }
 
 h1 {
@@ -49,106 +29,69 @@ h1 {
     color: #ff69b4;
     margin-top: 20px;
     font-size: 2.5rem;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: 0.8s ease;
 }
 
 .date {
     margin-top: 10px;
-    font-size: 1.1rem;
     color: #555;
 }
 
-/* =========================
-   VARSHA'S PERFECT ROUND IMAGE
-========================= */
+/* Image */
 .birthday-image {
     width: 200px;
     height: 200px;
     border-radius: 50%;
     border: 5px solid #ffb6c1;
-    box-shadow: 0 0 20px rgba(255, 182, 193, 0.6);
-    display: block;
-    margin: 20px auto;
     object-fit: cover;
     animation: floatImage 4s ease-in-out infinite alternate;
 }
 
 @keyframes floatImage {
-    0% {
-        transform: translateY(0);
-    }
-
-    100% {
-        transform: translateY(-20px);
-    }
+    to { transform: translateY(-20px); }
 }
 
-/* =========================
-   BUTTON
-========================= */
+/* Button */
 button {
     margin-top: 20px;
     padding: 12px 25px;
     border: none;
     border-radius: 30px;
     background: #ffb6c1;
-    color: #333;
-    font-size: 1rem;
     cursor: pointer;
-    transition: transform 0.3s;
+    transition: 0.3s;
 }
 
 button:hover {
     transform: scale(1.1);
 }
 
-/* =========================
-   BALLOONS (FEWER & SLOWER)
-========================= */
+/* Balloons */
+#balloons-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
 .balloon {
     position: absolute;
     width: 50px;
     height: 70px;
     border-radius: 50%;
-    animation: float 30s linear infinite;
-    /* slower */
-    cursor: pointer;
-}
-
-.pink {
-    background: #ffb6c1;
-    left: 15%;
-}
-
-.blue {
-    background: #add8e6;
-    left: 50%;
-    animation-delay: 2s;
-}
-
-.yellow {
-    background: #fffacd;
-    left: 75%;
-    animation-delay: 4s;
+    animation: float 25s linear infinite;
+    pointer-events: auto;
 }
 
 @keyframes float {
-    0% {
-        transform: translateY(0);
-    }
-
-    100% {
-        transform: translateY(-120vh);
-    }
+    to { transform: translateY(-120vh); }
 }
 
-/* =========================
-   GALLERY & VIDEO
-========================= */
-.gallery,
-.video-section {
-    margin: 40px auto;
-}
-
+/* Gallery & Video */
 .gallery img {
     width: 150px;
     margin: 10px;
@@ -161,9 +104,7 @@ video {
     border-radius: 15px;
 }
 
-/* =========================
-   HEARTS
-========================= */
+/* Hearts */
 .heart {
     position: fixed;
     bottom: 0;
@@ -172,58 +113,20 @@ video {
 }
 
 @keyframes heartFloat {
-    0% {
-        opacity: 0;
-        transform: translateY(0);
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateY(-200px);
-    }
+    to { transform: translateY(-200px); opacity: 0; }
 }
 
-/* =========================
-   UTILITIES
-========================= */
-.hidden {
-    display: none;
-}
+/* Utilities */
+.hidden { display: none; }
 
 canvas {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     pointer-events: none;
+    z-index: 1;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 600px) {
-    h1 {
-        font-size: 2rem;
-    }
-}
-
-/* =========================
-   DECORATIVE BACKGROUND
-========================= */
-.bg-decor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 0;
-    pointer-events: none;
-}
-
+/* Background Decor */
 .bg-decor span {
     position: absolute;
     font-size: 32px;
@@ -231,49 +134,7 @@ canvas {
     animation: floatDecor linear infinite;
 }
 
-.bg-decor span:nth-child(1) {
-    left: 5%;
-    animation-duration: 22s;
-}
-
-.bg-decor span:nth-child(2) {
-    left: 15%;
-    animation-duration: 28s;
-}
-
-.bg-decor span:nth-child(3) {
-    left: 30%;
-    animation-duration: 24s;
-}
-
-.bg-decor span:nth-child(4) {
-    left: 45%;
-    animation-duration: 30s;
-}
-
-.bg-decor span:nth-child(5) {
-    left: 60%;
-    animation-duration: 26s;
-}
-
-.bg-decor span:nth-child(6) {
-    left: 75%;
-    animation-duration: 32s;
-}
-
-.bg-decor span:nth-child(7) {
-    left: 90%;
-    animation-duration: 29s;
-}
-
 @keyframes floatDecor {
-    from {
-        top: 110%;
-        transform: rotate(0deg);
-    }
-
-    to {
-        top: -20%;
-        transform: rotate(360deg);
-    }
+    from { top: 110%; }
+    to { top: -20%; transform: rotate(360deg); }
 }
